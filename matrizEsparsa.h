@@ -134,23 +134,21 @@ int InsereColuna(MatrizEsparsa *m, int coluna, Node *novo){
 // Caso a posição já exista, substitua o valor da célula.
 // Recebe o endereço da matriz, a linha e coluna nas quais o valor deve ser inserido
 int inserir(MatrizEsparsa *m, int linha, int coluna, int valor){
-	//Caso a matriz não esteja alocada ou a coluna na qual deseja inserir o valor
+		//Caso a matriz não esteja alocada ou a coluna na qual deseja inserir o valor
 	//seja maior ou menor do que a quantidade de colunas que a matriz possui, a função não 
 	//efetua nenhuma operação e retorna 0
-	if ((m == NULL) || (coluna > m->numColunas) || (coluna < 0))
-		return 0;
-	//Caso a matriz não esteja alocada ou a linha na qual deseja inserir o valor
-	//seja maior ou menor do que a quantidade de linhas que a matriz possui, a função não 
-	//efetua nenhuma operação e retorna 0
-	if ((m == NULL) || (linha > m->numLinhas) || (linha < 0))
-		return 0;
-	//Em casos válidos:
-	//Cria um nó do tipo sentinela
-	Node *novo = criaSentinela();
-	//Insere o valor no nó indicado (procura em qual linha ele pertence)
-	InsereLinha(m, linha, novo);
-	InsereColuna(m, coluna, novo);
-	return 1;
+	if(linha<0 || coluna<0 || linha>=m->numLinhas || coluna>=m->numColunas){
+        return 0;
+    }else{
+		// Encontra a linha em que está o nó desejado e retorna o valor existente nele
+        Node* linhas = posicaoColuna(m->linhas[linha],coluna);
+		//int qtde = m->numColunas;
+        for(int i = 0; i < m->numColunas; i++){
+          linhas = linhas->direita;
+        }
+        linhas->valor = valor;
+        return 1;
+    }
 }
 int acessar(MatrizEsparsa *m, int linha, int coluna){
 	// Devolve o valor correspondente a linha e coluna solicitada.

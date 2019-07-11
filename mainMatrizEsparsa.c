@@ -17,6 +17,10 @@ int main(){
     MatrizEsparsa* mat = criarMatriz(4,4);
     
     inserir(mat, 3,0,8);
+    inserir(mat, 2,0,4);
+    inserir(mat, 1,0,5);
+    inserir(mat, 0,0,1);
     imprimir(mat);
+
     return 0;
 }
