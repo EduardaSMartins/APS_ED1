@@ -5,8 +5,8 @@
 int main(){
     
     MatrizEsparsa* mat = criarMatriz(4,4);
-    ///int end = inserir(mat, 2,2,10);
-    //imprimir(mat);
+    int end = inserir(mat, 2,2,10);
+    imprimir(mat);
     return 0;
 }
 
