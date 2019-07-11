@@ -152,21 +152,6 @@ int inserir(MatrizEsparsa *m, int linha, int coluna, int valor){
 	InsereColuna(m, coluna, novo);
 	return 1;
 }
-
-// Remove o elemento da linha <linha> e coluna <coluna> na matriz <m> .
-// Devolva 1 caso a remoção seja efetivada e 0 caso contrário.
-int remover(MatrizEsparsa *m, int linha, int coluna){
-	//Remove o elemento
-	free(acessar(m, linha, coluna));
-	if(acessar(m, linha,coluna))
-		// Retorna 1 caso a remoção for efetuada 
-		return 1;
-	else
-		// Retorna 0 caso a remoção não for efetuada
-		return 0;
-}
-
-
 int acessar(MatrizEsparsa *m, int linha, int coluna){
 	// Devolve o valor correspondente a linha e coluna solicitada.
 	// Faça a validação dos índices. Caso a posição solicitada esteja fora do intervalo, devolva zero.
@@ -179,6 +164,27 @@ int acessar(MatrizEsparsa *m, int linha, int coluna){
         return linhas->valor;
     }
 }
+
+// Remove o elemento da linha <linha> e coluna <coluna> na matriz <m> .
+// Devolva 1 caso a remoção seja efetivada e 0 caso contrário.
+int remover(MatrizEsparsa *m, int linha, int coluna){
+	Node* linhas;
+//	int result = acessar(m, linha, coluna);
+	//Remove o elemento
+	if(linha<0 || coluna<0 || linha>=m->numLinhas || coluna>=m->numColunas){
+        return 0;
+    }else{
+		// Encontra a linha em que está o nó desejado e muda seu valor para NULL
+        linhas = posicaoLinha(m->linhas[linha], coluna+1);
+        linhas->valor = NULL;
+    }
+	if(linhas->valor == NULL)
+		return 1;
+	else
+		return 0;
+}
+
+
 // Imprime os valores da matriz na tela. Cada linha deve ser impressa em uma linha diferente
 // e os elementos separados por espaço ou tabulação. Os elementos não representados na matriz (valor zero),
 // também devem ser impressos.
