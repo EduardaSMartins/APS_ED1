@@ -40,8 +40,8 @@ Node *posicaoLinha(Node *sentinela, int coluna);
 //int InsereLinha(MatrizEsparsa *m, int linha, Node *novo);
 Node *posicaoColuna(Node *sentinela, int linha);
 //int InsereColuna(MatrizEsparsa *m, int coluna, Node *novo);
-int insereEmCima(Node* auxColuna, Node* novo);
-int insereEsquerda(Node* auxLinha, Node* novo);
+void insereEmCima(Node* auxColuna, Node* novo);
+void insereEsquerda(Node* auxLinha, Node* novo);
 int verifica(MatrizEsparsa *m, int linha, int coluna, int valor);
 int inserir(MatrizEsparsa *m, int linha, int coluna, int valor);
 int remover(MatrizEsparsa *m, int linha, int coluna);
@@ -94,19 +94,6 @@ Node *posicaoLinha(Node *sentinela, int coluna){
 	return aux;
 }
 
-//Função que insere o valor na linha desejada
-int InsereLinha(MatrizEsparsa *m, int linha, Node *novo){
-	// Recebe a linha em qual nó o valor deve ser inserido
-	Node *aux = posicaoLinha(m->linhas[linha], novo->coluna);
-	// Faz a validação de qual será o apontamento de nós a esquerda e a direita do novo nó
-	novo->direita = aux->direita;
-    novo->esquerda = aux;
-    aux->direita->esquerda = novo;
-    aux->direita = novo;
-	// Retorna 1 para indicar que a inserção de coluna está correta
-	return 1;
-}
-
 //Funçao que devolve a posição da coluna desejada
 Node *posicaoColuna(Node *sentinela, int linha){
 	// 	// Variável auxiliar no processo de percorrer as colunas até encontrar o nó
@@ -118,19 +105,6 @@ Node *posicaoColuna(Node *sentinela, int linha){
 	}
 	//Retorna o endereço de qual é o nó abaixo do nó de desejava-se encontrar
 	return aux;
-}
-
-//Função que insere o valor na coluna desejada
-int InsereColuna(MatrizEsparsa *m, int coluna, Node *novo){
-	// Recebe a coluna em qual nó o valor deve ser inserido
-	Node *aux = posicaoColuna(m->colunas[coluna], novo->linha);
-	// Faz a validação de qual será o apontamento de nós que estão acima e abaixo do novo nó
-	novo->baixo = aux->baixo;
-    novo->cima = aux;
-    aux->baixo->cima = novo;
-    aux->baixo = novo;
-	// Retorna 1 para indicar que a inserção de coluna está correta
-	return 1;
 }
 
 // Insere o <valor> na matriz <m> na linha <linha> e coluna <coluna>.
@@ -145,21 +119,18 @@ Node *criarNo(int linha, int coluna, int valor){
 	return novo;
 }
 
-int insereEmCima(Node* auxColuna, Node* novo){
-		//Node *aux = posicaoLinha(m->linhas[linha], novo->coluna);
+void insereEmCima(Node* auxColuna, Node* novo){
 	novo->baixo = auxColuna->cima;
-	novo->cima;
+	novo->cima = auxColuna->baixo;
 	auxColuna->cima = novo->baixo;
-	auxColuna->baixo;
-	return 1;
+	auxColuna->baixo = novo->cima;
 }
 
-int insereEsquerda(Node* auxLinha, Node* novo){
+void insereEsquerda(Node* auxLinha, Node* novo){
 	novo->direita = auxLinha->esquerda;
-	novo->esquerda;
+	novo->esquerda = auxLinha->direita;
 	auxLinha->esquerda = novo->direita;
-	auxLinha->direita;
-	return 1;
+	auxLinha->direita = novo->esquerda;
 }
 
 

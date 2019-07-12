@@ -19,9 +19,9 @@ int main(){
     inserir(mat, 3,0,8);
     inserir(mat, 2,0,4);
     inserir(mat, 1,0,5);
-    inserir(mat, 0,0,1);
-    inserir(mat, 2,2,7);
+//    inserir(mat, 0,0,1);
+    inserir(mat, 2,1,7);
     imprimir(mat);
-    remover(mat,0,1);
+    remover(mat,0,0);
     return 0;
 }
