@@ -20,6 +20,7 @@ int main(){
     inserir(mat, 2,0,4);
     inserir(mat, 1,0,5);
     inserir(mat, 0,0,1);
+    inserir(mat, 2,2,7);
     imprimir(mat);
 
     return 0;

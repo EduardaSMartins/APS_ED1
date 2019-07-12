@@ -107,9 +107,9 @@ int InsereLinha(MatrizEsparsa *m, int linha, Node *novo){
 //Funçao que devolve a posição da coluna desejada
 Node *posicaoColuna(Node *sentinela, int linha){
 	// 	// Variável auxiliar no processo de percorrer as colunas até encontrar o nó
-	Node *aux = sentinela;
+	Node *aux = sentinela->baixo;
 	// Procura na matriz (por colunas) aonde o nó está
-	while (aux->baixo != sentinela && linha > aux->baixo->coluna){
+	while (aux != sentinela && linha > aux->baixo->linha){
 		// aux recebe o endereço do próximo nó abaixo dele
 		aux = aux->baixo;
 	}
@@ -134,39 +134,45 @@ int InsereColuna(MatrizEsparsa *m, int coluna, Node *novo){
 // Caso a posição já exista, substitua o valor da célula.
 // Recebe o endereço da matriz, a linha e coluna nas quais o valor deve ser inserido
 int inserir(MatrizEsparsa *m, int linha, int coluna, int valor){
-		//Caso a matriz não esteja alocada ou a coluna na qual deseja inserir o valor
+	//Caso a matriz não esteja alocada ou a coluna na qual deseja inserir o valor
 	//seja maior ou menor do que a quantidade de colunas que a matriz possui, a função não 
 	//efetua nenhuma operação e retorna 0
 	if(linha<0 || coluna<0 || linha>=m->numLinhas || coluna>=m->numColunas){
         return 0;
     }else{
 		// Encontra a linha em que está o nó desejado e retorna o valor existente nele
-        Node* linhas = posicaoColuna(m->linhas[linha],coluna);
-		//int qtde = m->numColunas;
-        for(int i = 0; i < m->numColunas; i++){
+      
+      Node* auxColuna = posicaoColuna(m->colunas[coluna], linha);
+      if(auxColuna->linha == linha && auxColuna->coluna == coluna){
+        auxColuna->valor = valor;
+      }else{
+        Node* auxLinha = posicaoLinha(m->linhas[linha], coluna);
+        Node* novo = criarNo(linha, coluna, valor);
+        insereEmCima(auxColuna, novo);
+        insereEsquerda(auxLinha, novo);
+
+      }
+
+
+
+
+
+
+
+        Node* linhas = (Node*) malloc(sizeof(Node));
+        linhas = posicaoColuna(m->linhas[linha],coluna);
+        for(int i = 0; i<=coluna; i++){
           linhas = linhas->direita;
         }
         linhas->valor = valor;
         return 1;
     }
 }
-int acessar(MatrizEsparsa *m, int linha, int coluna){
-	// Devolve o valor correspondente a linha e coluna solicitada.
-	// Faça a validação dos índices. Caso a posição solicitada esteja fora do intervalo, devolva zero.
-	// No caso da posição estar fora do intervalo a função retornará 0
-	if(linha<0 || coluna<0 || linha>=m->numLinhas || coluna>=m->numColunas){
-        return 0;
-    }else{
-		// Encontra a linha em que está o nó desejado e retorna o valor existente nele
-        Node* linhas = posicaoLinha(m->linhas[linha], coluna+1);
-        return linhas->valor;
-    }
-}
 
 // Remove o elemento da linha <linha> e coluna <coluna> na matriz <m> .
 // Devolva 1 caso a remoção seja efetivada e 0 caso contrário.
 int remover(MatrizEsparsa *m, int linha, int coluna){
-	Node* linhas;
+		Node* linhas;
 //	int result = acessar(m, linha, coluna);
 	//Remove o elemento
 	if(linha<0 || coluna<0 || linha>=m->numLinhas || coluna>=m->numColunas){
@@ -183,6 +189,18 @@ int remover(MatrizEsparsa *m, int linha, int coluna){
 }
 
 
+int acessar(MatrizEsparsa *m, int linha, int coluna){
+	// Devolve o valor correspondente a linha e coluna solicitada.
+	// Faça a validação dos índices. Caso a posição solicitada esteja fora do intervalo, devolva zero.
+	// No caso da posição estar fora do intervalo a função retornará 0
+	if(linha<0 || coluna<0 || linha>=m->numLinhas || coluna>=m->numColunas){
+        return 0;
+    }else{
+		// Encontra a linha em que está o nó desejado e retorna o valor existente nele
+        Node* linhas = posicaoLinha(m->linhas[linha], coluna+3);
+        return linhas->valor;
+    }
+}
 // Imprime os valores da matriz na tela. Cada linha deve ser impressa em uma linha diferente
 // e os elementos separados por espaço ou tabulação. Os elementos não representados na matriz (valor zero),
 // também devem ser impressos.
