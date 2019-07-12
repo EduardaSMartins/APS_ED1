@@ -34,11 +34,14 @@ typedef struct{
 // -------------------- PROTÓTIPOS DAS FUNÇÕES -------------------- //
 
 Node *criaSentinela();
+Node *criarNo(int linha, int coluna, int valor);
 MatrizEsparsa *criarMatriz(int qtdeLinhas, int qtdeColunas);
 Node *posicaoLinha(Node *sentinela, int coluna);
-int InsereLinha(MatrizEsparsa *m, int linha, Node *novo);
+//int InsereLinha(MatrizEsparsa *m, int linha, Node *novo);
 Node *posicaoColuna(Node *sentinela, int linha);
-int InsereColuna(MatrizEsparsa *m, int coluna, Node *novo);
+//int InsereColuna(MatrizEsparsa *m, int coluna, Node *novo);
+int insereEmCima(Node* auxColuna, Node* novo);
+int insereEsquerda(Node* auxLinha, Node* novo);
 int verifica(MatrizEsparsa *m, int linha, int coluna, int valor);
 int inserir(MatrizEsparsa *m, int linha, int coluna, int valor);
 int remover(MatrizEsparsa *m, int linha, int coluna);
@@ -133,6 +136,33 @@ int InsereColuna(MatrizEsparsa *m, int coluna, Node *novo){
 // Insere o <valor> na matriz <m> na linha <linha> e coluna <coluna>.
 // Caso a posição já exista, substitua o valor da célula.
 // Recebe o endereço da matriz, a linha e coluna nas quais o valor deve ser inserido
+
+Node *criarNo(int linha, int coluna, int valor){
+	Node* novo = (Node *)malloc(sizeof(Node));
+  novo->linha = linha;
+  novo->coluna = coluna;  
+  novo->valor = valor;  
+	return novo;
+}
+
+int insereEmCima(Node* auxColuna, Node* novo){
+		//Node *aux = posicaoLinha(m->linhas[linha], novo->coluna);
+	novo->baixo = auxColuna->cima;
+	novo->cima;
+	auxColuna->cima = novo->baixo;
+	auxColuna->baixo;
+	return 1;
+}
+
+int insereEsquerda(Node* auxLinha, Node* novo){
+	novo->direita = auxLinha->esquerda;
+	novo->esquerda;
+	auxLinha->esquerda = novo->direita;
+	auxLinha->direita;
+	return 1;
+}
+
+
 int inserir(MatrizEsparsa *m, int linha, int coluna, int valor){
 	//Caso a matriz não esteja alocada ou a coluna na qual deseja inserir o valor
 	//seja maior ou menor do que a quantidade de colunas que a matriz possui, a função não 
@@ -150,15 +180,7 @@ int inserir(MatrizEsparsa *m, int linha, int coluna, int valor){
         Node* novo = criarNo(linha, coluna, valor);
         insereEmCima(auxColuna, novo);
         insereEsquerda(auxLinha, novo);
-
       }
-
-
-
-
-
-
-
         Node* linhas = (Node*) malloc(sizeof(Node));
         linhas = posicaoColuna(m->linhas[linha],coluna);
         for(int i = 0; i<=coluna; i++){

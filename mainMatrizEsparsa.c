@@ -22,6 +22,6 @@ int main(){
     inserir(mat, 0,0,1);
     inserir(mat, 2,2,7);
     imprimir(mat);
-
+    remover(mat,0,1);
     return 0;
 }
