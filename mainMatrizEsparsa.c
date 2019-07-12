@@ -17,11 +17,12 @@ int main(){
     MatrizEsparsa* mat = criarMatriz(4,4);
     
     inserir(mat, 3,0,8);
-    inserir(mat, 2,0,4);
-    inserir(mat, 1,0,5);
-//    inserir(mat, 0,0,1);
-    inserir(mat, 2,1,7);
+    inserir(mat, 2,1,4);
+    inserir(mat, 1,3,5);
+    inserir(mat, 0,2,6);    
+    inserir(mat, 0,1,7);
     imprimir(mat);
-    remover(mat,0,0);
+    // remover(mat,0,0);
+    // imprimir(mat);
     return 0;
 }

@@ -36,12 +36,10 @@ typedef struct{
 Node *criaSentinela();
 Node *criarNo(int linha, int coluna, int valor);
 MatrizEsparsa *criarMatriz(int qtdeLinhas, int qtdeColunas);
-Node *posicaoLinha(Node *sentinela, int coluna);
-//int InsereLinha(MatrizEsparsa *m, int linha, Node *novo);
-Node *posicaoColuna(Node *sentinela, int linha);
-//int InsereColuna(MatrizEsparsa *m, int coluna, Node *novo);
-void insereEmCima(Node* auxColuna, Node* novo);
-void insereEsquerda(Node* auxLinha, Node* novo);
+Node* posicaoLinha(Node *sentinela, int coluna);
+Node* posicaoColuna(Node *sentinela, int linha);
+int insereEmCima(Node* auxColuna, Node* novo);
+int insereEsquerda(Node* auxLinha, Node* novo);
 int verifica(MatrizEsparsa *m, int linha, int coluna, int valor);
 int inserir(MatrizEsparsa *m, int linha, int coluna, int valor);
 int remover(MatrizEsparsa *m, int linha, int coluna);
@@ -86,7 +84,7 @@ Node *posicaoLinha(Node *sentinela, int coluna){
 	// Variável auxiliar no processo de percorrer as linhas até encontrar o nó
 	Node *aux = sentinela;
 	// Procura na matriz (por linhas) aonde o nó está
-	while (aux->direita != sentinela && coluna > aux->direita->coluna){
+	while (aux->direita != sentinela && coluna > aux->coluna){
 		// aux recebe o endereço do próximo nó à direita dele
 		aux = aux->direita;
 	}
@@ -99,7 +97,7 @@ Node *posicaoColuna(Node *sentinela, int linha){
 	// 	// Variável auxiliar no processo de percorrer as colunas até encontrar o nó
 	Node *aux = sentinela->baixo;
 	// Procura na matriz (por colunas) aonde o nó está
-	while (aux != sentinela && linha > aux->baixo->linha){
+	while (aux != sentinela && linha > aux->linha){
 		// aux recebe o endereço do próximo nó abaixo dele
 		aux = aux->baixo;
 	}
@@ -119,20 +117,23 @@ Node *criarNo(int linha, int coluna, int valor){
 	return novo;
 }
 
-void insereEmCima(Node* auxColuna, Node* novo){
-	novo->baixo = auxColuna->cima;
-	novo->cima = auxColuna->baixo;
-	auxColuna->cima = novo->baixo;
-	auxColuna->baixo = novo->cima;
+// Refaz o apontamento dos ponteiros da coluna em que o nó está sendo inserido
+int insereEmCima(Node* auxColuna, Node* novo){
+	novo->baixo = auxColuna;
+	novo->cima = auxColuna->cima;
+	auxColuna->cima->baixo = novo;
+	auxColuna->cima = novo;
+	return 1;
 }
 
-void insereEsquerda(Node* auxLinha, Node* novo){
-	novo->direita = auxLinha->esquerda;
-	novo->esquerda = auxLinha->direita;
-	auxLinha->esquerda = novo->direita;
-	auxLinha->direita = novo->esquerda;
+// Refaz o apontamento dos ponteiros da linha em que o nó está sendo inserido
+int insereEsquerda(Node* auxLinha, Node* novo){
+	novo->direita = auxLinha;
+	novo->esquerda = auxLinha->esquerda;
+	auxLinha->esquerda->direita = novo;
+	auxLinha->esquerda = novo;
+	return 1;
 }
-
 
 int inserir(MatrizEsparsa *m, int linha, int coluna, int valor){
 	//Caso a matriz não esteja alocada ou a coluna na qual deseja inserir o valor
@@ -152,12 +153,6 @@ int inserir(MatrizEsparsa *m, int linha, int coluna, int valor){
         insereEmCima(auxColuna, novo);
         insereEsquerda(auxLinha, novo);
       }
-        Node* linhas = (Node*) malloc(sizeof(Node));
-        linhas = posicaoColuna(m->linhas[linha],coluna);
-        for(int i = 0; i<=coluna; i++){
-          linhas = linhas->direita;
-        }
-        linhas->valor = valor;
         return 1;
     }
 }
